@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_opencv_attendance_admin,access_opencv_attendance_admin,model_opencv_attendance_opencv_attendance,opencv_attendance.group_op_faculty_website,1,1,1,0
+access_lepay_admin,access_lepay_admin,model_lepay_lepay,base.group_user,1,1,1,1

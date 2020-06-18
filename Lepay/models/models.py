@@ -1,56 +1,74 @@
 # # -*- coding: utf-8 -*-
 #
-from odoo import models, fields, api
-import cv2
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
-class opencv_attendance(models.Model):
-    # _name = 'opencv_attendance.opencv_attendance'
-    _inherit = 'op.attendance.line'
+
+class lepay(models.Model):
+    _name = 'lepay.lepay'
+
+    field1 = fields.Char('field1', size=256, required=True)
+    field2 = fields.Char('field2', readonly=True, compute='_compute_field2')
+    field3 = fields.Char('field3', readonly=True, compute='_compute_field3')
+
+    @api.constrains('field1')
+    def _check_field1(self):
+        if self.field1:
+            empty_list = []
+            record = self.field1
+            record = record.split(',')
+            for value in record:
+                try:
+                    value = int(value)
+                except:
+                    raise ValidationError("Please enter only integer numbers!")
+                if value not in empty_list:
+                    empty_list.append(value)
+                else:
+                    raise ValidationError("Dont enter duplicate values!")
 
     @api.multi
-    def method_webcam_trigger(self):
-        img = cv2.imread(
-            'C:/Program Files (x86)/Odoo 12.0/server/odoo/addons/opencv_attendance/static/src/img/watch.png',
-            cv2.IMREAD_GRAYSCALE)
-        cv2.imshow('image', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-        super(opencv_attendance, self).method_webcam_trigger()
+    @api.depends('field1')
+    def _compute_field2(self):
+        for obj in self:
+            if obj.field1:
+                string = ''
+                empty_list = []
+                record = str(obj.field1)
+                record = record.split(',')
+                for value in record:
+                    try:
+                        value = int(value)
+                    except:
+                        raise ValidationError("Validation Error!")
+                    if value not in empty_list:
+                        empty_list.append(value)
+                    else:
+                        pass
+                odd_numbers = [num for num in empty_list if num % 2 == 1]
+                for num in odd_numbers:
+                    string += str(num) + ','
+                obj.field2 = string.strip(',')
 
-
-#         key = cv2.waitKey(1)
-#         webcam = cv2.VideoCapture(0)
-#         while True:
-#             try:
-#                 print("4")
-#                 check, frame = webcam.read()
-#                 print(webcam.isOpened(), check, frame)
-#                 if check:
-#                     cv2.imshow("Capturing", frame)
-#                     print("*********")
-#                     key = cv2.waitKey(1)
-#                     # if key == ord('s'):
-#                     #     print("SAVE IMAGE")
-#                     #     cv2.imwrite(filename='product_image', img=frame)
-#                     #     img = image.fromarray(frame, 'RGB')
-#                     #     img.save('my.png')
-#                     #     roiImg = img.crop()
-#                     #     imgByteArr = io.BytesIO()
-#                     #     roiImg.save(imgByteArr, format='PNG')
-#                     #     imgByteArr = imgByteArr.getvalue()
-#                     #     image_base64 = base64.b64encode(imgByteArr)
-#                     #     cv2.waitKey(1650)
-#                     #     cv2.destroyAllWindows()
-#                     #     vals = {
-#                     #         'image': image_base64,
-#                     #     }
-#                     #     self.write(vals)
-#                     #     break
-#                     # elif key == ord('q'):
-#                     #     break
-#             except(KeyboardInterrupt):
-#                 webcam.release()
-#                 cv2.destroyAllWindows()
-#                 break
-#         webcam.release()
-#         cv2.destroyAllWindows()
+    @api.multi
+    @api.depends('field1')
+    def _compute_field3(self):
+        for obj in self:
+            if obj.field1:
+                newstring = []
+                empty_list = []
+                record = str(obj.field1)
+                record = record.split(',')
+                for value in record:
+                    try:
+                        value = int(value)
+                    except:
+                        raise ValidationError("Validation Error!")
+                    if value not in empty_list:
+                        empty_list.append(value)
+                    else:
+                        pass
+                for i in range(len(empty_list) - 1):
+                    if int(empty_list[i]) + int(empty_list[i + 1]) == 20:
+                        newstring.append({int(empty_list[i]), int(empty_list[i + 1])})
+                obj.field3 = str(newstring)
