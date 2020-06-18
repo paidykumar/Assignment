@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+         <menuitem id="lepay_main_menu"
+                  name="Lepay"
+                  sequence="10" groups="group_op_faculty_website"/>
+
+        <menuitem id="lepay_sub_menu"
+                  name="Lepay"
+                  groups="group_op_faculty_website"
+                  parent="lepay.lepay_main_menu"
+                  sequence="10"/>
+         <menuitem id="lepay_sub_menu2"
+                  name="Lepay"
+                  groups="group_op_faculty_website"
+                  parent="lepay.lepay_main_menu"
+                  action="lepay.action_window"
+                  sequence="10"/>
+    </data>
+</odoo>
